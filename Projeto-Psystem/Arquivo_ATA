@@ -1,0 +1,36 @@
+Às 20 horas, do dia 04, do mês de Setembro, do ano de 2024, reuniu-se o grupo: PSYSTEM, da Faculdade, Senac São Paulo,
+Onde: Foi discutido dentre as etapas do projeto: Distribuição das tarefas onde:
+Reunimos as informações do Estúdio de Pilates da Patricia, e com base nas informações, realizamos a entrevista em formato de Podcast, onde foi realizado divérsas perguntas
+relacionadas ao cotidiano da empresa, seja nas marcações de horários tanto com o relacionamento com os clientes.
+
+11/09/2024 - Editado por Gabriel Nogueira Mazzieri
+Os membros Gabriel Mazzieri, Lorenzzo Rodrigues e Enrico Folheni, realizaram a documentação do projeto. Adicionando informações na Introdução, 
+Escolha da Comunidade a ser atendida, objetivo, justificativa, Identificação da comunidade a ser atendida, resumo do Projeto, Revisão de Literatura,
+Metodologia, Planejamento das etapas do Projeto, Coleta de dados (Questionário e entrevista), Modelagem Conceitual de dados,
+Modelagem lógica dos dados, Modelagem física dos dados e aplicação das formas normais, Planejamento do sistema (diagrama de classe UML), Diagrama de Caso de Uso e o Planejamento das interfaces.
+Sendo definido quais atividades serão realizadas pelos integrantes, definindo também as datas a serem realizadas. 
+Foi entregue a documentação em ABNT junto com os áudios da dona da microempresa. Na tarefa também foi selecionado e discutido sobre as ODS relacionadas ao projeto.  
+
+25/09/2024 - Editado por Gabriel Nogueira Mazzieri
+Foi passado em aula o SQL, sendo apresentado como criar o banco de dados, e suas tabela, no SGBD MySQL Workbench.
+
+02/10/2024 - Editado por Gabriel Nogueira Mazzieri
+Foram concluídas as alterações solicitadas pelo professor. O diagrama UML e o diagrama de caso de uso foram criados, e as modelagens solicitadas foram corrigidas. Todas as atualizações foram adicionadas ao documento principal (Word). Além disso, desenvolvemos o script do banco de dados em SQL no SGBD MySQL Workbench e o adicionamos ao diretório "Arquivo_SQL" no GitHub.
+
+09/10/2024 - Editado por Gabriel Nogueira Mazzieri
+O grupo modificou alguns arquivos que não estavam totalmente finalizados (Modelo lógico e conceitual). E adicionamos ao documento word. também foi construído uma parte do código em Java para o funcionamento do sistema. 
+
+16/10/2024 - Editado por Lorenzzo Rodrigues de Oliveira
+O grupo fez o planejamento para os próximos dias e o código foi editado e atualizado
+
+24/10/2024 - Editado por Enrico Folheni Carvalho
+Conexão do Banco de Dados com o código do projeto, envio do questionário e envio do documento da autorização de imagem para proprietário do estabelecimento
+
+30/10/2024 - Editado por Lorenzzo Rodrigues de Oliveira
+Feita a atualização do arquivo WORD, onde foi adicionado o questionário e "prints" das conversas do WhatsApp, atualização dos códigos, aprimoramento da conexão do JAVA via BANCO DE DADOS e alteração na interface do sistema.
+
+06/11/2024 - Editado por Lorenzzo Rodrigues de Oliveira
+Foi realizado atualizações no código do JAVA e descutido as pendências ainda presentes no projeto. 
+
+13/11/2024 - Editado por Gabriel Nogueira Mazzieri
+Foram adicionadas novas alterações no código Java e SQL. E foi discutido e planejado as últimas atualizações do projeto para a entrega final.
