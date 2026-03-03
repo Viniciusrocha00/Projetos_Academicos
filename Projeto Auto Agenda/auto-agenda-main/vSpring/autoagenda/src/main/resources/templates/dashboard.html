@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Centro Automotivo JJ</title>
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="/css/style1.css">
+  <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/sweetalert2.all.min.js"></script>
+  <style>
+    /* Estilos para o modal de redefinição de senha */
+    #modalRedefinirSenha .modal-content {
+      background: rgba(0, 0, 0, 0.95);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 20px;
+    }
+    
+    #modalRedefinirSenha .modal-header {
+      border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+      padding: 1.5rem;
+    }
+    
+    #modalRedefinirSenha .modal-title {
+      color: var(--cor-primaria, #FFD700);
+    }
+    
+    #modalRedefinirSenha .modal-title i {
+      margin-right: 10px;
+    }
+    
+    #modalRedefinirSenha .modal-body {
+      padding: 2rem;
+    }
+    
+    #modalRedefinirSenha label {
+      color: #fff;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    #modalRedefinirSenha .form-control {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border-radius: 8px;
+      padding: 12px;
+    }
+    
+    #modalRedefinirSenha .form-control:focus {
+      border-color: var(--cor-primaria, #FFD700);
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+      background-color: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+    
+    #modalRedefinirSenha .btn-salvar-senha {
+      background-color: var(--cor-primaria, #FFD700);
+      border: none;
+      color: #000;
+      font-weight: 600;
+      padding: 12px;
+      border-radius: 8px;
+      width: 100%;
+      margin-top: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    #modalRedefinirSenha .btn-salvar-senha:hover {
+      background-color: #E6C200;
+      transform: translateY(-2px);
+    }
+    
+    #modalRedefinirSenha .btn-salvar-senha:disabled {
+      background-color: #666;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    /* Backdrop com blur */
+    .modal-backdrop-blur {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Cabeçalho -->
+	<div th:replace="~{barra :: barra}"></div>
+
+  <!-- Conteúdo Principal -->
+  <main class="main-content">
+    <div class="container">
+      <div class="page-header">
+        <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+        <p>Visão geral do Centro Automotivo JJ</p>
+      </div>
+      
+      <!-- Seção de Agendamentos -->
+      <div class="table-container">
+        <div class="table-header">
+          <h3><i class="fas fa-calendar-check"></i> Agendamentos</h3>
+        </div>
+        
+        <div class="dashboard-cards-container">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="stat-info">
+              <h3 th:text="${totalAgenda}"></h3>
+              <p>Total de Agendamentos</p>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+              <h3 th:text="${agendaPendente}"></h3>
+              <p>Agendamentos Pendentes</p>
+            </div>
+          </div>
+          
+          <div class="stat-card success">
+            <div class="stat-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+              <h3 th:text="${agendaConcluido}"></h3>
+              <p>Agendamentos Concluídos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção de Produtos/Estoque -->
+      <div class="table-container">
+        <div class="table-header">
+          <h3><i class="fas fa-box-open"></i> Produtos</h3>
+        </div>
+        
+        <div class="dashboard-cards-container">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-boxes"></i>
+            </div>
+            <div class="stat-info">
+              <h3 th:text="${totalProdutos}"></h3>
+              <p>Total de Produtos</p>
+            </div>
+          </div>
+          
+          <div class="stat-card warning">
+            <div class="stat-icon">
+              <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="stat-info">
+              <h3 th:text="${estoqueBaixo}"></h3>
+              <p>Produtos em Baixo Estoque</p>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-info">
+              <h3 th:text="'R$ ' + ${precoEstoque}"></h3>
+              <p>Valor Total em Estoque</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção de Serviços 
+      <div class="table-container">
+        <div class="table-header">
+          <h3><i class="fas fa-tools"></i> Serviços</h3>
+        </div>
+        
+        <div class="dashboard-cards-container">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-wrench"></i>
+            </div>
+            <div class="stat-info">
+              <h3>12</h3>
+              <p>Total de Serviços Realizados</p>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-car"></i>
+            </div>
+            <div class="stat-info">
+              <h3>3</h3>
+              <p>Serviços em Andamento</p>
+            </div>
+          </div>
+          
+          <div class="stat-card success">
+            <div class="stat-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+              <h3>R$ 8.500</h3>
+              <p>Receita de Serviços</p>
+            </div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <i class="fas fa-car-alt"></i>
+          <span class="logo-highlight">Centro Automotivo </span> JJ
+        </div>
+        <p class="footer-copyright">&copy; 2025 Centro Automotivo JJ. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal de Redefinição de Senha (Primeiro Login) -->
+  <div class="modal fade" id="modalRedefinirSenha" data-bs-backdrop="static" 
+       data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRedefinirSenhaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalRedefinirSenhaLabel">
+            <i class="fas fa-key"></i> Redefinir sua senha
+          </h5>
+        </div>
+        <div class="modal-body">
+          <form id="formRedefinirSenha" method="post" action="/funcionario-api/redefinir-senha">
+            <div class="mb-3">
+              <label for="novaSenha" class="form-label">Nova Senha</label>
+              <input type="password" class="form-control" id="novaSenha" name="novaSenha" 
+                     required minlength="6" placeholder="Mínimo 6 caracteres">
+            </div>
+            <div class="mb-3">
+              <label for="confirmarSenha" class="form-label">Confirmar Senha</label>
+              <input type="password" class="form-control" id="confirmarSenha" 
+                     required minlength="6" placeholder="Digite a senha novamente">
+              <small id="senhaFeedback" class="text-danger" style="display:none;"></small>
+            </div>
+            <button type="submit" class="btn btn-salvar-senha" id="btnSalvarSenha">
+              <i class="fas fa-save"></i> Salvar Senha
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script para validação de senhas e controle do modal -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const formRedefinirSenha = document.getElementById('formRedefinirSenha');
+      const novaSenha = document.getElementById('novaSenha');
+      const confirmarSenha = document.getElementById('confirmarSenha');
+      const senhaFeedback = document.getElementById('senhaFeedback');
+      const btnSalvarSenha = document.getElementById('btnSalvarSenha');
+      
+      // Verifica se é primeiro login (Thymeleaf irá definir esta variável)
+      const primeiroLogin = [[${usuarioLogado.primeiroLogin}]];
+      
+      if (primeiroLogin && formRedefinirSenha) {
+        // Abre o modal automaticamente
+        const modal = new bootstrap.Modal(document.getElementById('modalRedefinirSenha'));
+        modal.show();
+        
+        // Adiciona classe de blur ao backdrop
+        document.querySelector('.modal-backdrop')?.classList.add('modal-backdrop-blur');
+      }
+      
+      // Validação de equivalência de senhas
+      function validarEquivalencia() {
+        const senha1 = novaSenha.value;
+        const senha2 = confirmarSenha.value;
+        
+        if (senha2.length === 0) {
+          senhaFeedback.style.display = 'none';
+          confirmarSenha.classList.remove('is-invalid');
+          return true;
+        }
+        
+        if (senha1 !== senha2) {
+          senhaFeedback.textContent = 'As senhas não coincidem';
+          senhaFeedback.style.display = 'block';
+          confirmarSenha.classList.add('is-invalid');
+          return false;
+        } else {
+          senhaFeedback.style.display = 'none';
+          confirmarSenha.classList.remove('is-invalid');
+          return true;
+        }
+      }
+      
+      // Event listeners
+      if (confirmarSenha) {
+        confirmarSenha.addEventListener('input', validarEquivalencia);
+      }
+      
+      if (novaSenha) {
+        novaSenha.addEventListener('input', function() {
+          if (confirmarSenha.value.length > 0) {
+            validarEquivalencia();
+          }
+        });
+      }
+      
+      // Validação no submit
+      if (formRedefinirSenha) {
+        formRedefinirSenha.addEventListener('submit', function(e) {
+          if (!validarEquivalencia()) {
+            e.preventDefault();
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro',
+              text: 'As senhas não coincidem. Por favor, verifique.',
+              confirmButtonColor: '#FFD700'
+            });
+            return;
+          }
+          
+          if (novaSenha.value.length < 6) {
+            e.preventDefault();
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro',
+              text: 'A senha deve ter no mínimo 6 caracteres.',
+              confirmButtonColor: '#FFD700'
+            });
+            return;
+          }
+        });
+      }
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburgerMenu = document.getElementById('hamburger-menu');
+      const navMenu = document.getElementById('nav-menu');
+
+      if (hamburgerMenu && navMenu) {
+        hamburgerMenu.addEventListener('click', function() {
+          navMenu.classList.toggle('active');
+          hamburgerMenu.classList.toggle('active');
+        });
+
+        // Fecha o menu ao clicar em um link
+        const navLinks = navMenu.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+          link.addEventListener('click', function() {
+            navMenu.classList.remove('active');
+            hamburgerMenu.classList.remove('active');
+          });
+        });
+
+        // Fecha o menu ao clicar fora dele
+        document.addEventListener('click', function(event) {
+          if (!navMenu.contains(event.target) && !hamburgerMenu.contains(event.target)) {
+            navMenu.classList.remove('active');
+            hamburgerMenu.classList.remove('active');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

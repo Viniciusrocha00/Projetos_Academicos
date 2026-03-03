@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Centro Automotivo JJ</title>
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="/js/sweetalert2.all.min.js"></script>
+	<script src="/js/inputmask.min.js"></script>
+	<script src="/js/validacao.js"></script>
+    <link rel="stylesheet" href="/css/estilo.css">
+	<script src="/js/script.js"></script>
+</head>
+
+<body class="bg-dark text-white d-flex align-items-center justify-content-center min-vh-100" style="background: linear-gradient(135deg, #000000 0%, #333333 100%);">
+    <div class="container">
+        <div class="cadastro">
+            <img src="/img/logo.png" class="logo-login">
+
+			<form method="post" action="/funcionario-api/salvar">
+                <div class="cad-inputs">
+										
+                <span>Nome Completo</span>
+                <div class="input-group mb-3">
+                    <input type="text" id="nomeFuncionario" name="nomeFuncionario" class="form-control" required>
+					<div id="nome-feedback" class="invalid-feedback">Digite seu nome e sobrenome.</div>
+                </div>
+
+                <span>Usuário</span>
+                <div class="input-group mb-3">
+                    <input type="text" id="usuario" name="usuario" class="form-control" required>
+					<div id="usuario-feedback" class="invalid-feedback">O usuário não pode conter espaços.</div>
+                </div>
+
+                <span>CPF</span>
+                <div class="input-group mb-3">
+                    <input type="text" id="cpf" name="cpf" class="form-control"
+						maxlength="14"
+			           	autocomplete="off" required>
+                </div>
+
+                <span>E-mail</span>
+                <div class="input-group mb-3">
+                    <input type="email" id="email" name="email" class="form-control" required>
+					<div id="email-feedback" class="invalid-feedback">E-mail inválido</div>
+                </div>
+			
+                <span>Senha</span>
+                <div class="input-group mb-3">
+                    <input type="password" id="senha" class="form-control" required>
+                </div>
+
+                <span>Confirme sua senha</span>
+                <div class="input-group mb-3">
+                    <input type="password" id="confirmarSenha" class="form-control" required>
+                </div>
+				<input type="hidden" name="senha" id="senhaValida" readOnly>
+
+            <div class="botoes d-flex justify-content-center gap-3 flex-wrap mt-3">
+                <button type="submit" class="btnSalvar">Salvar</button>
+                <button type="button" class="btnVoltar" onclick="window.location.href = '/login'">Voltar</button>
+			</div>
+			<input type="hidden" name="cadastroInicial" value="true">
+            </form>
+        </div>
+    </div>
+	<script>
+	    document.addEventListener('DOMContentLoaded', function() {
+	        const form = document.querySelector('form');
+			const nomeInput = document.getElementById('nomeFuncionario');
+			const nomeFeedback = document.getElementById('nome-feedback');
+	        const cpfInput = document.getElementById('cpf');
+	        const emailInput = document.getElementById('email');
+	        const senhaInput = document.getElementById('senha');
+	        const confirmarSenhaInput = document.getElementById('confirmarSenha');
+	        const senhaValidaInput = document.getElementById('senhaValida');
+	        const emailFeedback = document.getElementById('email-feedback');
+	        const usuarioInput = document.getElementById('usuario');
+	        const usuarioFeedback = document.getElementById('usuario-feedback');
+
+			function obterErroNome(nome) {
+	            const valor = nome.trim();
+	            if (valor.length === 0) return "Nome é obrigatório.";
+	            const partes = valor.split(' ').filter(parte => parte.length > 0);
+	            
+	            if (partes.length < 2) {
+	                return "Digite seu nome e sobrenome.";
+	            }
+	            if (partes[0].length < 2) {
+	                return "Nome muito curto.";
+	            }
+	            return null;
+	        }
+	
+	        if (nomeInput && nomeFeedback) {
+	            nomeInput.addEventListener('input', function() {
+	                this.classList.remove('is-invalid');
+	                nomeFeedback.style.display = 'none';
+	            });
+	            nomeInput.addEventListener('blur', function() {
+	                const erro = obterErroNome(this.value);
+	                if (erro) {
+	                    this.classList.add('is-invalid');
+	                    nomeFeedback.textContent = erro;
+	                    nomeFeedback.style.display = 'block';
+	                } else {
+	                    this.classList.remove('is-invalid');
+	                    nomeFeedback.style.display = 'none';
+	                }
+	            });
+	        }
+			
+	        // --- VALIDAÇÃO DE USUÁRIO (SEM ESPAÇOS) ---
+	        if (usuarioInput) {
+	            usuarioInput.addEventListener('input', function() {
+	                if (this.value.includes(" ")) {
+	                    this.value = this.value.replace(/\s/g, "");
+	                    
+	                    this.classList.add('is-invalid');
+	                    if(usuarioFeedback) usuarioFeedback.style.display = 'block';
+	                    
+	                    setTimeout(() => {
+	                        this.classList.remove('is-invalid');
+	                        if(usuarioFeedback) usuarioFeedback.style.display = 'none';
+	                    }, 2000);
+	                } else {
+	                    this.classList.remove('is-invalid');
+	                    if(usuarioFeedback) usuarioFeedback.style.display = 'none';
+	                }
+	            });
+	        }
+
+	        // --- MÁSCARA E VALIDAÇÃO DE CPF ---
+	        if (cpfInput) {
+	            cpfInput.addEventListener('input', function(e) {
+	                let v = e.target.value.replace(/\D/g, "");
+	                v = v.replace(/(\d{3})(\d)/, "$1.$2");
+	                v = v.replace(/(\d{3})(\d)/, "$1.$2");
+	                v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+	                e.target.value = v;
+	                this.classList.remove('is-invalid', 'is-valid');
+	            });
+
+	            cpfInput.addEventListener('blur', function() {
+	                const cpfLimpo = this.value.replace(/\D/g, '');
+	                if (cpfLimpo === '') return;
+
+	                if (validarCPF(cpfLimpo)) {
+	                    this.classList.remove('is-invalid');
+	                    this.classList.add('is-valid');
+	                } else {
+	                    this.classList.remove('is-valid');
+	                    this.classList.add('is-invalid');
+	                }
+	            });
+	        }
+
+	        function validarCPF(cpf) {
+	            if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+	            let soma = 0, resto;
+	            for (let i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+	            resto = (soma * 10) % 11;
+	            if (resto === 10 || resto === 11) resto = 0;
+	            if (resto !== parseInt(cpf.substring(9, 10))) return false;
+	            soma = 0;
+	            for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+	            resto = (soma * 10) % 11;
+	            if (resto === 10 || resto === 11) resto = 0;
+	            return resto === parseInt(cpf.substring(10, 11));
+	        }
+
+	        // --- VALIDAÇÃO DE E-MAIL ---
+	        if (emailInput && emailFeedback) {
+	            emailInput.addEventListener('input', function() {
+	                if (this.value.includes(" ")) {
+	                    this.value = this.value.replace(/\s/g, "");
+	                }
+	                this.classList.remove('is-invalid');
+	                emailFeedback.style.display = 'none';
+	            });
+
+	            emailInput.addEventListener('blur', function() {
+	                const email = this.value;
+	                if (email === "") return;
+
+	                let msgErro = "";
+	                let valido = true;
+	                const partes = email.split('@');
+
+	                if (partes.length !== 2 || !partes[0] || !partes[1]) {
+	                    valido = false; msgErro = "Falta o '@' ou usuário/domínio.";
+	                } else if (!partes[1].includes('.')) {
+	                    valido = false; msgErro = "Falta o domínio (.com).";
+	                } else if (partes[1].startsWith('.') || partes[1].endsWith('.')) {
+	                    valido = false; msgErro = "Ponto em local inválido.";
+	                } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+	                    valido = false; msgErro = "Caracteres inválidos.";
+	                }
+
+	                if (!valido) {
+	                    this.classList.add('is-invalid');
+	                    emailFeedback.textContent = msgErro;
+	                    emailFeedback.style.display = 'block';
+	                } else {
+	                    this.classList.remove('is-invalid');
+	                    emailFeedback.style.display = 'none';
+	                }
+	            });
+	        }
+
+	        // --- VALIDAÇÃO DE SENHAS ---
+	        function verificarSenhas() {
+	            const s1 = senhaInput.value;
+	            const s2 = confirmarSenhaInput.value;
+	            
+	            if (s1 && s2) {
+	                if (s1 !== s2) {
+	                    confirmarSenhaInput.classList.add('is-invalid');
+	                    senhaValidaInput.value = "";
+	                } else {
+	                    confirmarSenhaInput.classList.remove('is-invalid');
+	                    confirmarSenhaInput.classList.add('is-valid');
+	                    senhaValidaInput.value = s1;
+	                }
+	            }
+	        }
+
+	        if(senhaInput && confirmarSenhaInput) {
+	            senhaInput.addEventListener('input', verificarSenhas);
+	            confirmarSenhaInput.addEventListener('input', verificarSenhas);
+	        }
+
+	        form.addEventListener('submit', function(e) {
+				const erroNome = obterErroNome(nomeInput.value);
+	            if (erroNome) {
+	                e.preventDefault();
+	                nomeInput.focus();
+	                nomeInput.classList.add('is-invalid');
+	                nomeFeedback.textContent = erroNome;
+	                nomeFeedback.style.display = 'block';
+	                return;
+	            }
+				
+	            if (cpfInput.classList.contains('is-invalid')) {
+	                e.preventDefault(); cpfInput.focus(); return;
+	            }
+
+	            if (emailInput.classList.contains('is-invalid')) {
+	                e.preventDefault(); emailInput.focus(); return;
+	            }
+	            
+	            if (usuarioInput.value.includes(" ")) {
+	                 e.preventDefault(); 
+	                 usuarioInput.focus(); 
+	                 usuarioInput.classList.add('is-invalid');
+	                 return;
+	            }
+	            
+	            if (senhaInput.value !== confirmarSenhaInput.value) {
+	                e.preventDefault();
+	                confirmarSenhaInput.classList.add('is-invalid');
+	                confirmarSenhaInput.focus();
+	                return;
+	            }
+	            cpfInput.value = cpfInput.value.replace(/\D/g, '');
+	            senhaValidaInput.value = senhaInput.value;
+	        });
+	    });
+	</script>
+</body>
+
+</html>

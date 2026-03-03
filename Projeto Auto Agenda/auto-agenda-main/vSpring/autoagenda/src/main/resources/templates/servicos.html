@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços - Centro Automotivo JJ</title>
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/css/style1.css">
+    <link rel="stylesheet" href="/css/main-styles.css">
+    <link rel="stylesheet" href="/css/custom.css">
+    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/sweetalert2.all.min.js"></script>
+    <script src="/js/validacao.js"></script>
+    <style>
+        /* Permitir quebra de linha na descrição sem quebrar a tabela */
+        .desc-servico {
+            max-width: 400px;
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+
+        /* Mobile: largura menor */
+        @media (max-width: 768px) {
+            .desc-servico {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="~{barra :: barra}"></div>
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header" id="pageHeaderScrollTarget">
+                <h2><i class="fas fa-tools"></i> Gerenciamento de Serviços </h2>
+                <p>Controle e cadastre novos serviços</p>
+            </div>
+
+            <div class="form-container" id="formNovoServicoContainer" style="display: none;">
+                <h3 id="formTitulo"><i class="fas fa-plus"></i> Cadastrar Novo Serviço</h3>
+
+                <form method="post" action="/servico-api/salvar" id="form-servico">
+                    <input type="hidden" name="idServico" id="idServico" readonly>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="nome-servico">Nome do Serviço</label>
+                                <input type="text" id="nome-servico" name="nomeServico" class="form-input"
+                                    placeholder="Ex: Troca de óleo" maxlength="110">
+                                <div id="nome-servico-counter" class="text-end text-muted" style="font-size: 0.85em; margin-top: 5px;">
+                                    <small>0/110</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="descricao-servico">Descrição</label>
+                                <input type="text" id="descricao-servico" name="descServico" class="form-input"
+                                    placeholder="Ex: Troca de óleo do motor" maxlength="200">
+                                <div id="descricao-servico-counter" class="text-end text-muted" style="font-size: 0.85em; margin-top: 5px;">
+                                    <small>0/200</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="btn-cancelar-novo-servico" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Salvar Serviço
+                        </button>
+                    </div>
+                </form>
+                <form id="deleteForm" action="servico-api/apagar" method="post" style="display: none;">
+                    <input type="hidden" name="idServico" id="deleteId">
+                </form>
+            </div>
+
+            <div class="table-container">
+                <div class="table-header">
+                    <h3><i class="fas fa-clipboard-list"></i> Lista de Serviços</h3>
+                    <button id="btn-novo-servico" class="btn btn-primary"><i class="fas fa-plus"></i>Novo Serviço</button>
+                </div>
+
+            <div class="table-actions">
+                <div class="form-group">
+                    <label for="busca">Buscar Serviço</label>
+                    <input type="text" name="busca" id="busca" placeholder="Digite para buscar...">
+                </div>
+            </div>
+
+                <table class="table appointments-table">
+                    <thead>
+                        <tr>
+                            <th>Serviço</th>
+                            <th>Descrição</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${servicos == null or servicos.empty}">
+                            <td colspan="3" style="text-align: center;">Nenhum resultado encontrado</td>
+                        </tr>
+                        <tr th:each="serv : ${servicos}">
+                            <td class="nome-servico" th:text="${serv.nomeServico}" data-label="Serviço"></td>
+                            <td class="desc-servico" th:text="${serv.descServico}" data-label="Descrição"></td>
+                            <td class="action-buttons">
+                                <div class="button-wrapper">
+                                    <button class="btn-icon btn-edit" th:attr="data-id=${serv.idServico}" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-icon btn-delete" th:attr="data-id=${serv.idServico}" title="Excluir">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-car-alt"></i>
+                    <span class="logo-highlight">Centro Automotivo </span> JJ
+                </div>
+                <p>&copy; 2025 Centro Automotivo JJ. Todos os direitos reservados 2025.</p>
+            </div>
+        </div>
+    </footer>
+	
+	<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // ============================================================
+        // MENU MOBILE (Hambúrguer)
+        // ============================================================
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const navMenu = document.getElementById('nav-menu');
+
+        if (hamburgerMenu && navMenu) {
+            hamburgerMenu.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                hamburgerMenu.classList.toggle('active');
+            });
+            navMenu.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    hamburgerMenu.classList.remove('active');
+                });
+            });
+            document.addEventListener('click', (event) => {
+                if (!navMenu.contains(event.target) && !hamburgerMenu.contains(event.target)) {
+                    navMenu.classList.remove('active');
+                    hamburgerMenu.classList.remove('active');
+                }
+            });
+        }
+
+        // ============================================================
+        // CONTROLE DO FORMULÁRIO (Novo / Editar / Cancelar)
+        // ============================================================
+        const form = document.getElementById('form-servico');
+        const formTitulo = document.getElementById('formTitulo');
+        const btnNovoServico = document.getElementById('btn-novo-servico');
+        const formServicoContainer = document.getElementById('formNovoServicoContainer');
+        const btnCancelarNovoServico = document.getElementById('btn-cancelar-novo-servico');
+        const inputId = document.getElementById('idServico');
+        const inputNome = document.getElementById('nome-servico');
+        const inputDesc = document.getElementById('descricao-servico');
+
+        if (btnNovoServico) {
+            btnNovoServico.addEventListener('click', () => {
+                inputId.value = "";
+                form.reset();
+                formTitulo.innerHTML = '<i class="fas fa-plus"></i> Cadastrar Novo Serviço';
+                formServicoContainer.style.display = 'block';
+                
+                verificarCampos(); 
+                atualizarContadorNome(0);
+                atualizarContadorDesc(0);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // Form submit validation
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                const nomeLength = inputNome.value.trim().length;
+                if (nomeLength > 110) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro de Validação',
+                        text: 'Limite de caracteres excedido para o nome do serviço (máximo 110)',
+                        confirmButtonColor: '#d33'
+                    });
+                    return false;
+                }
+            });
+        }
+
+        // Cancelar e Fechar formulário
+        if (btnCancelarNovoServico) {
+            btnCancelarNovoServico.addEventListener('click', () => {
+                form.reset();
+                formServicoContainer.style.display = 'none';
+            });
+        }
+
+        // ============================================================
+        // VALIDAÇÃO E CONTADORES
+        // ============================================================
+        const botaoSalvar = form.querySelector('button[type="submit"]');
+        const contadorNome = document.getElementById('nome-servico-counter');
+        const contadorDesc = document.getElementById('descricao-servico-counter');
+        const maxLenNome = inputNome ? inputNome.getAttribute('maxlength') : 110;
+        const maxLenDesc = inputDesc ? inputDesc.getAttribute('maxlength') : 200;
+
+        function verificarCampos() {
+            const nomeValido = inputNome.value.trim() !== "";
+            const descValida = inputDesc.value.trim() !== "";
+            botaoSalvar.disabled = !(nomeValido && descValida);
+        }
+
+        function atualizarContadorNome(tamanhoAtual) {
+            if (!contadorNome) return;
+            
+            const small = contadorNome.querySelector('small');
+            small.textContent = `${tamanhoAtual}/${maxLenNome}`;
+
+            if (tamanhoAtual >= maxLenNome) {
+                contadorNome.classList.remove('text-muted');
+                contadorNome.classList.add('text-danger');
+                small.textContent = `${tamanhoAtual}/${maxLenNome} - Limite atingido!`;
+            } else {
+                contadorNome.classList.add('text-muted');
+                contadorNome.classList.remove('text-danger');
+            }
+        }
+
+        function atualizarContadorDesc(tamanhoAtual) {
+            if (!contadorDesc) return;
+            
+            const small = contadorDesc.querySelector('small');
+            small.textContent = `${tamanhoAtual}/${maxLenDesc}`;
+
+            if (tamanhoAtual >= maxLenDesc) {
+                contadorDesc.classList.remove('text-muted');
+                contadorDesc.classList.add('text-danger');
+                small.textContent = `${tamanhoAtual}/${maxLenDesc} - Limite atingido!`;
+            } else {
+                contadorDesc.classList.add('text-muted');
+                contadorDesc.classList.remove('text-danger');
+            }
+        }
+
+        if (inputNome) {
+            inputNome.addEventListener('input', function() {
+                verificarCampos();
+                atualizarContadorNome(this.value.length);
+            });
+        }
+        
+        if (inputDesc) {
+            inputDesc.addEventListener('input', function() {
+                verificarCampos();
+                atualizarContadorDesc(this.value.length);
+            });
+        }
+        verificarCampos();
+
+        // ============================================================
+        // AÇÕES DA TABELA (Editar / Excluir / Busca)
+        // ============================================================
+        // Botão EDITAR
+        document.querySelectorAll('.btn-edit').forEach(button => {
+            button.addEventListener('click', function () {
+                const row = this.closest('tr');
+                const id = this.dataset.id;
+                const nome = row.querySelector('.nome-servico').textContent.trim();
+                const descricao = row.querySelector('.desc-servico').textContent.trim();
+
+                formTitulo.innerHTML = '<i class="fas fa-edit"></i> Editar Serviço';
+                inputId.value = id;
+                inputNome.value = nome;
+                inputDesc.value = descricao;
+
+                formServicoContainer.style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                verificarCampos();
+                atualizarContadorNome(nome.length);
+                atualizarContadorDesc(descricao.length);
+            });
+        });
+
+        // Botão EXCLUIR
+		document.querySelectorAll('.btn-delete').forEach(button => {
+		    button.addEventListener('click', function (e) {
+		        e.preventDefault();
+		        const id = this.dataset.id;
+		        
+		        Swal.fire({
+		            title: 'Excluir serviço?',
+		            text: "Não será possível reverter essa ação!",
+		            icon: 'warning',
+		            showCancelButton: true,
+		            confirmButtonColor: '#d33',
+		            cancelButtonColor: '#6c757d',
+		            confirmButtonText: 'Sim, excluir!',
+		            cancelButtonText: 'Cancelar'
+		        }).then((result) => {
+		            if (result.isConfirmed) {
+		                fetch('/servico-api/apagar', {
+		                    method: 'POST',
+		                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+		                    body: `idServico=${id}`
+		                })
+		                .then(async r => {
+		                    if (r.ok) {
+		                        Swal.fire('Excluído!', 'Serviço removido.', 'success').then(() => location.reload());
+		                    } else if (r.status === 409) {
+		                        const msg = await r.text();
+		                        Swal.fire({
+		                            icon: 'warning',
+		                            title: 'Erro!',
+		                            text: msg,
+		                        });
+		                    } else {
+		                        Swal.fire('Erro!', 'Ocorreu um erro ao excluir.', 'error');
+		                    }
+		                })
+		                .catch(() => Swal.fire('Erro', 'Erro de conexão.', 'error'));
+		            }
+		        });
+		    });
+		});
+
+        // BUSCA DINÂMICA (Filtro na tabela)
+        const inputBusca = document.getElementById('busca');
+        const linhasTabela = document.querySelectorAll('tbody tr');
+
+        if (inputBusca) {
+            inputBusca.addEventListener('input', function () {
+                const termo = this.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+                linhasTabela.forEach(linha => {
+                    const texto = linha.textContent.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                    linha.style.display = (termo === "" || texto.includes(termo)) ? '' : 'none';
+                });
+            });
+        }
+    });
+</script>
+</body>
+</html>

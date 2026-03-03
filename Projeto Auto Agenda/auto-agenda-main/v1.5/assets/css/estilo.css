@@ -1,0 +1,107 @@
+/* Removidos os position: absolute problemáticos */
+.mensagem {
+    font-size: 20pt;
+    font-weight: bolder;
+    color: white;
+    margin-bottom: 20px;
+}
+
+/* Centraliza a imagem no topo */
+.logo-login {
+    width: 170px;
+    height: 170px;
+    display: block;
+    margin: 0 auto 20px auto;
+}
+
+/* Login container mantém estilo visual */
+.login {
+    backdrop-filter: blur(20px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: solid 3px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+    padding: 30px 50px;
+    margin: 0 auto;
+    background-color: transparent;
+}
+
+/* Mantém espaçamento entre inputs */
+.log-inputs {
+    margin-top: 16%;
+}
+
+.form-control {
+    background-color: transparent;
+    border: none;
+    border-bottom: solid 1px white;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.form-control:hover {
+    border-bottom: solid 1px yellow;
+}
+
+.form-control:focus {
+    transition: all 0.3s ease;
+    background-color: transparent;
+    border: none;
+    border-bottom: solid 2px yellow;
+    box-shadow: none;
+}
+
+span {
+    color: white;
+    font-weight: bold;
+    font-size: 12pt;
+    text-align: left;
+    display: block;
+}
+
+.botoes {
+    margin-top: 20px;
+}
+
+/* Botões originais mantidos */
+.btnLogin, .btnCadastro {
+    transition: 0.2s ease;
+    background-color: rgb(230, 230, 0);
+    border: solid;
+    border-radius: 90px;
+    font-weight: bolder;
+    height: 40px;
+    width: 100px;
+    box-shadow: 0px 5px rgb(54, 54, 52);
+}
+
+.btnLogin:hover, .btnCadastro:hover {
+    box-shadow: 0px 0px black;
+}
+
+/* Responsividade */
+@media (max-width: 500px) {
+    .login {
+        padding: 20px;
+    }
+
+    .log-inputs {
+        margin-top: 10%;
+    }
+
+    .botoes {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btnLogin, .btnCadastro {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .logo-login {
+        width: 120px;
+        height: 120px;
+    }
+}
