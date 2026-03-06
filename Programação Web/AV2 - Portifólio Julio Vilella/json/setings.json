@@ -1,0 +1,20 @@
+{
+  "project": "Portifólio Julio Vilella",
+  "author": "Vinicius Jesus Rocha",
+  "version": "1.0",
+  "description": "Site pessoal com modo claro/escuro e design responsivo",
+  "features": [
+    "Design responsivo",
+    "Modo claro/escuro",
+    "Navegação suave",
+    "Formulário de contato",
+    "Efeitos hover"
+  ],
+  "technologies": [
+    "HTML5",
+    "CSS3",
+    "JavaScript",
+    "Flexbox",
+    "Grid"
+  ]
+}
