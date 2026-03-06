@@ -1,4 +1,4 @@
-> ![Atualizado em](https://img.shields.io/github/last-commit/camilla-sr/auto-agenda?label=Atualizado%20em)
+
 ```
 Integrantes: Hector Semenssato, Camilla de Souza, Dymitri Bonifácio, Vinicius Rocha
 ```
