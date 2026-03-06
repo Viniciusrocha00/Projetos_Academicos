@@ -80,8 +80,62 @@ Para padronizar os commits, o GitHub possui convenções que deixam os logs de m
 >
 > *Mudanças nos arquivos (limpeza, renomeação ou ajustes de arquivos e pastas) devem receber em seu commit a convenção **"chore"**. Essa convenção não abrange alterações diretas em código.
 
+Para incluir todas as imagens da pasta img no seu README.md, organizei o código Markdown abaixo integrando as imagens que faltavam (Agendamentos Concluídos, Produtos Abertos, Serviços Abertos, etc.) de forma lógica dentro das seções do seu projeto.
 
+Copie e cole este código no seu arquivo:
 
+Markdown
+# 🏎️ Auto Agenda - Sistema de Gerenciamento de Oficina
 
+**Integrantes:** Hector Semenssato, Camilla de Souza, Dymitri Bonifácio, Vinicius Rocha
 
+## :thinking: O que é esse projeto?
 
+Este projeto trata-se de um sistema de oficina mecânica para gerenciamento de agendamentos e estoque que será utilizado pelos colaboradores da oficina.
+
+O gerenciamento de agendamentos consiste em uma funcionalidade que armazenará em banco de dados informações sobre os agendamentos de serviços realizados pela oficina mecânica contendo tipo de serviço que será feito no veículo, dados do cliente (nome, e-mail e telefone para contato, veículo), observações, data da realização do agendamento, previsão de conclusão e a conclusão.
+
+Para o gerenciamento de estoque, temos informações dos produtos contendo nome, código, categoria, preço de compra e venda, fornecedor, descrição e a quantidade existente no estoque atual.
+
+O sistema possui 5 páginas de navegação: "Dashboard", "Agendamentos", "Serviços", "Funcionários" (acesso restrito ao(s) administrador(es) do sistema) e "Produtos". Elas ficam disponíveis para acesso via barra de navegação na parte superior de todas as páginas.
+
+> É obrigatório ter usuário e senha criados para realizar acesso a qualquer funcionalidade existente desse sistema.
+
+---
+
+## 📸 Visualização do Sistema
+
+Abaixo, você pode conferir todas as interfaces e fluxos do **Auto Agenda**:
+
+### 🖥️ Painel Principal e Acesso
+<p align="center">
+  <img src="img/dashboard.png" alt="Dashboard do Sistema" width="800">
+  <br>
+  <em>Painel Principal com indicadores de serviços e estoque.</em>
+</p>
+
+| Tela de Login | Cadastro de Usuários | Confirmação de Cadastro |
+|---|---|---|
+| ![Login](img/Pagina_login.png) | ![Cadastro](img/Pagina_cadastro.png) | ![Sucesso](img/Cadastro_concluido.png) |
+
+### 🛠️ Gestão de Agendamentos
+| Agendamentos Gerais | Agendamentos | Agendamentos Concluídos |
+|---|---|---|
+| ![Geral](img/agendamentos.png) | ![Aberto](img/Agendamentos%20Aberto.png) | ![Concluído](img/Agendamentos%20Concluido.png) |
+
+### 👥 Gestão de Clientes
+| Clientes Cadastrados | Clientes |
+|---|---|
+| ![Clientes](img/Clientes%20Cadastrados.png) | ![Clientes Aberto](img/Clientes%20Aberto.png) |
+
+### 📦 Controle de Estoque (Produtos)
+| Produtos em Estoque | Solicitações de Produtos |
+|---|---|
+| ![Estoque](img/Produtos%20Em%20estoque.png) | ![Produtos Aberto](img/Produtos%20Aberto.png) |
+
+### 🔧 Fluxo de Serviços
+| Serviços | Serviços Concluídos |
+|---|---|
+| ![Serviços Aberto](img/Serviços%20Aberto.png) | ![Serviços Concluído](img/Serviços%20Concluido.png) |
+
+---
