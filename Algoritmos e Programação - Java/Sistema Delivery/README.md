@@ -2,6 +2,7 @@
 
 **Disciplina:** Algoritmos I  
 **Linguagem:** Java
+**Docente:** João Carlos Lima e Silva
 
 ---
 
